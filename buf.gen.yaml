@@ -1,0 +1,15 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: "github.com/dadaxiaoxiao/api-repository/api/proto/gen"
+plugins:
+  - plugin: buf.build/protocolbuffers/go
+    # protoc-gen-go 插件
+    out: api/proto/gen
+    opt: paths=source_relative
+
+  - plugin: buf.build/grpc/go
+    # protoc-gen-go-grpc 插件
+    out: api/proto/gen
+    opt: paths=source_relative

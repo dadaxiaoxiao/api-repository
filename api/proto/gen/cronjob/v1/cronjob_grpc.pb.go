@@ -23,6 +23,7 @@ const (
 	CronJobService_ResetNextTime_FullMethodName = "/cronjob.v1.CronJobService/ResetNextTime"
 	CronJobService_AddJob_FullMethodName        = "/cronjob.v1.CronJobService/AddJob"
 	CronJobService_StopJob_FullMethodName       = "/cronjob.v1.CronJobService/StopJob"
+	CronJobService_Release_FullMethodName       = "/cronjob.v1.CronJobService/Release"
 )
 
 // CronJobServiceClient is the client API for CronJobService service.
@@ -33,6 +34,7 @@ type CronJobServiceClient interface {
 	ResetNextTime(ctx context.Context, in *ResetNextTimeRequest, opts ...grpc.CallOption) (*ResetNextTimeResponse, error)
 	AddJob(ctx context.Context, in *AddJobRequest, opts ...grpc.CallOption) (*AddJobResponse, error)
 	StopJob(ctx context.Context, in *StopJobRequest, opts ...grpc.CallOption) (*StopJobRequest, error)
+	Release(ctx context.Context, in *ReleaseRequest, opts ...grpc.CallOption) (*ReleaseResponse, error)
 }
 
 type cronJobServiceClient struct {
@@ -83,6 +85,16 @@ func (c *cronJobServiceClient) StopJob(ctx context.Context, in *StopJobRequest, 
 	return out, nil
 }
 
+func (c *cronJobServiceClient) Release(ctx context.Context, in *ReleaseRequest, opts ...grpc.CallOption) (*ReleaseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReleaseResponse)
+	err := c.cc.Invoke(ctx, CronJobService_Release_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CronJobServiceServer is the server API for CronJobService service.
 // All implementations must embed UnimplementedCronJobServiceServer
 // for forward compatibility
@@ -91,6 +103,7 @@ type CronJobServiceServer interface {
 	ResetNextTime(context.Context, *ResetNextTimeRequest) (*ResetNextTimeResponse, error)
 	AddJob(context.Context, *AddJobRequest) (*AddJobResponse, error)
 	StopJob(context.Context, *StopJobRequest) (*StopJobRequest, error)
+	Release(context.Context, *ReleaseRequest) (*ReleaseResponse, error)
 	mustEmbedUnimplementedCronJobServiceServer()
 }
 
@@ -109,6 +122,9 @@ func (UnimplementedCronJobServiceServer) AddJob(context.Context, *AddJobRequest)
 }
 func (UnimplementedCronJobServiceServer) StopJob(context.Context, *StopJobRequest) (*StopJobRequest, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StopJob not implemented")
+}
+func (UnimplementedCronJobServiceServer) Release(context.Context, *ReleaseRequest) (*ReleaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Release not implemented")
 }
 func (UnimplementedCronJobServiceServer) mustEmbedUnimplementedCronJobServiceServer() {}
 
@@ -195,6 +211,24 @@ func _CronJobService_StopJob_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CronJobService_Release_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReleaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CronJobServiceServer).Release(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CronJobService_Release_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CronJobServiceServer).Release(ctx, req.(*ReleaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CronJobService_ServiceDesc is the grpc.ServiceDesc for CronJobService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -217,6 +251,10 @@ var CronJobService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StopJob",
 			Handler:    _CronJobService_StopJob_Handler,
+		},
+		{
+			MethodName: "Release",
+			Handler:    _CronJobService_Release_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

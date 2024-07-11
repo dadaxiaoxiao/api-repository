@@ -9,7 +9,7 @@ service CronJobService {
   rpc ResetNextTime(ResetNextTimeRequest)returns(ResetNextTimeResponse);
   rpc AddJob(AddJobRequest)returns(AddJobResponse);
   rpc StopJob(StopJobRequest)returns(StopJobRequest);
-
+  rpc Release(ReleaseRequest)returns(ReleaseResponse);
 }
 
 message PreemptRequest {
@@ -37,6 +37,13 @@ message StopJobRequest{
   CronJob cronjob =1;
 }
 message StopJobResponse{
+
+}
+
+message ReleaseRequest{
+  CronJob cronjob =1;
+}
+message ReleaseResponse{
 
 }
 

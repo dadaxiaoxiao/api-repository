@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.4.0
 // - protoc             (unknown)
-// source: gen/payment/v1/payment.proto
+// source: payment/v1/payment.proto
 
 // buf:lint:ignore PACKAGE_DIRECTORY_MATCH
 
@@ -150,5 +150,5 @@ var WechatPaymentService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "gen/payment/v1/payment.proto",
+	Metadata: "payment/v1/payment.proto",
 }

@@ -1,0 +1,74 @@
+syntax="proto3";
+
+package tag.v1;
+option go_package="tag/v1;tagv1";
+
+// 标签服务
+service TagService {
+  // 创建标签
+  rpc CreateTag(CreateTagRequest)returns(CreateTagResponse);
+  // 获取所有资源，这里预期一个用户的标签不多，所以没必要做成分页
+  rpc GetTags(GetTagsRequest)returns(GetTagResponse);
+  // 给业务资源附加标签（打标签）
+  rpc AttachTags(AttachTagsRequest)returns(AttachTagsResponse);
+  // 获取对某个资源的打的标签
+  rpc GetBizTags(GetBizTagsRequest)returns(GetBizTagsResponse);
+}
+
+
+
+message CreateTagRequest {
+  // 创建人
+  int64 uid =1;
+  // 标签名称
+  string name =2;
+}
+
+message CreateTagResponse {
+  // 你创建的这个标签的 ID
+  Tag tag = 1;
+}
+
+
+message GetTagsRequest{
+  // 因为这里标签不多，可以不分页
+  int64 uid =1;
+}
+
+message GetTagResponse{
+  repeated Tag tag =1;
+}
+
+message AttachTagsRequest {
+  // 业务资源
+  string biz =1;
+  // 业务资源id
+  int64 biz_id=2;
+  int64 uid = 3;
+
+  repeated int64 tids =4;
+}
+
+message AttachTagsResponse {
+
+}
+
+message GetBizTagsRequest {
+  int64  uid = 1;
+  string biz = 2;
+  int64 biz_id = 3;
+}
+
+message GetBizTagsResponse  {
+  repeated Tag tags = 1;
+}
+
+message Tag {
+  int64 id =1;
+  string name = 2;
+  // 谁创建的标签
+  // 全局标签 这个字段是不需要
+  // 如果有层级标签，需要有oid 代表部门
+  int64 uid =3;
+}
+

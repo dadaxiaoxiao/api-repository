@@ -1,0 +1,61 @@
+syntax="proto3";
+
+package search.v1;
+option go_package="search/v1;searchv1";
+
+// 同步服务
+// 遵循 CQRS
+service SyncService {
+  // 通用的同步数据
+  //
+  // 这个时兜底功能，在没有业务定制化功能时，可暂时使用该接口
+  rpc InputAny(InputAnyRequest)returns(InputAnyResponse);
+  // 同步User 数据
+  rpc InputUser(InputUserRequest)returns(InputUserResponse);
+  // 同步Article 数据
+  rpc InputArticle(InputArticleRequest)returns(InputArticleResponse);
+}
+
+message InputAnyRequest {
+  // 索引名称
+  string index_name = 1;
+  // id
+  string doc_id = 2;
+  // json 格式数据，怎么传送过来，就怎么存入es
+  string data =3;
+}
+
+message InputAnyResponse {
+
+}
+
+message InputUserRequest{
+  User user =1;
+}
+
+message InputUserResponse{
+
+}
+
+message InputArticleRequest {
+  Article article =1;
+}
+
+message InputArticleResponse {
+
+}
+
+message User {
+  int64 id = 1;
+  string email =2;
+  string nickname =3;
+  string phone = 4;
+}
+
+message Article {
+  int64 id = 1;
+  string title = 2;
+  int32 status =3;
+  string content =4;
+  repeated string tags =5;
+}
